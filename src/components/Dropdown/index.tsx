@@ -45,7 +45,7 @@ const Dropdown: FC<DropdownProps> = ({options, placeholder}) => {
     <S.Dropdown ref={dropdownRef}>
       <S.DropdownSelector onClick={toggleVisible}>
         <S.DropdownPlaceholder>{selectedItem ? selectedItem : (placeholder ? placeholder : 'Выберите значение')}</S.DropdownPlaceholder>
-        <Arrow />
+        <Arrow className={isVisible ? 'rotated' : ''} />
       </S.DropdownSelector>
       {isVisible && <DropdownItems options={options} onChange={handleChange}/>}
     </S.Dropdown>

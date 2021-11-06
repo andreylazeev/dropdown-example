@@ -14,6 +14,10 @@ export const DropdownSelector = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
+  svg.rotated {
+    transform: rotate(180deg);
+  }
 `
 
 export const DropdownPlaceholder = styled.p`
