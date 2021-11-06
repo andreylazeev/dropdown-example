@@ -1,22 +1,18 @@
-import React, {FC} from "react";
+import {FC} from "react";
 
 import * as S from './styles'
+import {Option, Value} from "../../interfaces";
 
-import {Options} from "../../interfaces";
 
 interface DropdownItemsProps{
-  options: Options[],
-  onChange: (value:number) => void
+  options: Option[],
+  onChange: (value: Value) => void;
 }
 
 const DropdownItems: FC<DropdownItemsProps> = ({options, onChange}) => {
-  const handleChange = (value: number) => {
-    onChange(value)
-  }
-
-  return(
+  return (
     <S.ItemsWrap>
-      {options && options.map(option => <S.Item key={option.value} onClick={() => handleChange(option.value)}>{option.label}</S.Item>)}
+      {options && options.map(option => <S.Item key={option.value} onClick={() => onChange(option.value)}>{option.label}</S.Item>)}
     </S.ItemsWrap>
   )
 }

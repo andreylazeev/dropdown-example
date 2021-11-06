@@ -1,27 +1,31 @@
-import React, {FC, useState, useEffect, useRef} from "react";
+import {FC, useState, useEffect, useMemo, useRef, HTMLAttributes} from "react";
 import * as S from './styles'
 
-import {Options} from "../../interfaces";
-
+import {Option, Value} from "../../interfaces";
 import {ReactComponent as Arrow} from '../../assets/arrow.svg'
 import DropdownItems from "../DropdownItems";
 
-export interface DropdownProps {
-  options: Options[],
-  placeholder?: string
+export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
+  options: Option[];
+  placeholder?: string;
+  selected?: Value;
+  onSelectedChange?: (value: Value) => void;
 }
 
-
-const Dropdown: FC<DropdownProps> = ({options, placeholder}) => {
+const Dropdown: FC<DropdownProps> = ({options, placeholder, selected, onSelectedChange, ...restProps}) => {
 
   let dropdownRef = useRef<HTMLDivElement>(null)
 
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const selectedOption = useMemo(() => {
+    return options.find(el => el.value === selected);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, [selected, JSON.stringify(options)]);
 
-  const handleChange = (value: number) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleChange = (value: Value) => {
     setIsVisible(false)
-    setSelectedItem(options.find(el => el.value === value)!.label)
+    onSelectedChange && onSelectedChange(value);
   }
 
   const toggleVisible = () => {
@@ -30,7 +34,9 @@ const Dropdown: FC<DropdownProps> = ({options, placeholder}) => {
 
 
   const handleOutsideClick = (e: MouseEvent) => {
-    !e.composedPath().some(el => el === dropdownRef.current) && setIsVisible(false)
+    if (!dropdownRef.current?.contains(e.target as HTMLElement)) {
+      setIsVisible(false);
+    }
   }
 
   useEffect(() => {
@@ -42,12 +48,12 @@ const Dropdown: FC<DropdownProps> = ({options, placeholder}) => {
 
 
   return(
-    <S.Dropdown ref={dropdownRef}>
+    <S.Dropdown {...restProps} ref={dropdownRef}>
       <S.DropdownSelector onClick={toggleVisible}>
-        <S.DropdownPlaceholder>{selectedItem ? selectedItem : (placeholder ? placeholder : 'Выберите значение')}</S.DropdownPlaceholder>
+        <S.DropdownPlaceholder>{selectedOption?.label || placeholder || 'Выберите значение'}</S.DropdownPlaceholder>
         <Arrow className={isVisible ? 'rotated' : ''} />
       </S.DropdownSelector>
-      {isVisible && <DropdownItems options={options} onChange={handleChange}/>}
+      {isVisible && <DropdownItems options={options} onChange={handleChange} />}
     </S.Dropdown>
   )
 }
