@@ -1,25 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {FC} from 'react';
+import Dropdown from "./components/Dropdown";
+import styled from "styled-components";
 
-function App() {
+const options = [
+  {value: 1, label: 'test'},
+  {value: 2, label: 'test 2'},
+  {value: 3, label: 'test 3'},
+  {value: 4, label: 'test 4'},
+]
+
+const Wrapper = styled.div`
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+`
+
+const App: FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <Dropdown options={options} placeholder={'sasi'}/>
+    </Wrapper>
   );
 }
 
